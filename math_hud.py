@@ -77,14 +77,14 @@ def make_formula_panel(n_terms: int = 100) -> VGroup:
     panel.add(Line([-6.36, 1.29, 0], [-3.45, 1.29, 0],
                    stroke_color=MUTED, stroke_width=.65, stroke_opacity=.35))
     add_line("02 / FOURIER SERIES", 1.0, 15, CYAN)
-    add_line("z(t) = Σ cₙ exp(i 2πnt)", .57, 21)
-    add_line("cₙ = ∫₀¹ z(s)", .1, 23)
+    add_line("z(t) = Σ c[n] exp(i 2πnt)", .57, 21)
+    add_line("c[n] = ∫₀¹ z(s)", .1, 23)
     add_line("     exp(−i 2πns) ds", -.26, 21)
-    add_line("t ∈ [0, 1]", -.7, 17, MUTED)
+    add_line("0 <= t <= 1", -.7, 17, MUTED)
     panel.add(Line([-6.36, -.99, 0], [-3.45, -.99, 0],
                    stroke_color=MUTED, stroke_width=.65, stroke_opacity=.35))
     add_line("03 / EPICYCLES", -1.27, 15, MAGENTA)
-    add_line("圆半径 = |cₙ|", -1.69, 21, WHITE, CN_FONT)
+    add_line("圆半径 = |c[n]|", -1.69, 21, WHITE, CN_FONT)
     add_line("角速度 = 2πn", -2.08, 21, WHITE, CN_FONT)
     add_line(f"{n_terms:03d} TERMS / FFT", -2.66, 15, MUTED)
     return panel
@@ -111,6 +111,6 @@ def make_spectrum(amplitudes) -> VGroup:
             spectrum.add(Line([x, 0, 0], [x, height, 0],
                               stroke_color=CYAN if j % 2 == 0 else MAGENTA,
                               stroke_width=2, stroke_opacity=.75))
-    spectrum.add(_text("|cₙ| / MEASURED SPECTRUM", 10, MUTED)
+    spectrum.add(_text("|c[n]| / MEASURED SPECTRUM", 10, MUTED)
                  .move_to([0, -.16, 0]))
     return spectrum
