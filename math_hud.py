@@ -1,13 +1,13 @@
 """Typography and measured Fourier HUD for the contour motion scene.
 
-Everything is built from ordinary Manim Text/geometry; no TeX runtime is needed.
+Mathematical notation is typeset through TeX Live and Manim MathTex.
 Spectrum columns are derived only from the coefficients passed by the caller.
 """
 from __future__ import annotations
 
 import numpy as np
 from manim import (
-    VGroup, Text, Line, Rectangle, RoundedRectangle, Dot,
+    VGroup, Text, MathTex, Line, Rectangle, RoundedRectangle, Dot,
     LEFT, RIGHT, UP, DOWN, WHITE,
 )
 
@@ -54,7 +54,7 @@ def make_math_stage() -> VGroup:
     return stage
 
 
-def make_formula_panel(n_terms: int = 100) -> VGroup:
+def make_formula_panel(n_terms: int = 96) -> VGroup:
     """A narrow left column explaining exactly the computed Fourier series."""
     panel = VGroup()
     border = RoundedRectangle(width=3.35, height=5.85, corner_radius=.12,
@@ -71,22 +71,40 @@ def make_formula_panel(n_terms: int = 100) -> VGroup:
         panel.add(label)
         return label
 
+    def add_math(expression, y, height=.38, color=WHITE):
+        label = MathTex(expression, color=color, font_size=30)
+        label.scale_to_fit_height(height)
+        if label.width > 2.91:
+            label.scale_to_fit_width(2.91)
+        label.move_to([-6.36 + label.width / 2, y, 0])
+        panel.add(label)
+        return label
+
+    def add_mixed(caption, expression, y):
+        caption_label = _text(caption, 21, WHITE, CN_FONT)
+        math_label = MathTex(expression, color=WHITE, font_size=28)
+        row = VGroup(caption_label, math_label).arrange(RIGHT, buff=.10)
+        if row.width > 2.91:
+            row.scale_to_fit_width(2.91)
+        row.move_to([-6.36 + row.width / 2, y, 0])
+        panel.add(row)
+        return row
+
     add_line("01 / CONTOUR", 2.49, 15, CYAN)
     add_line("轮廓 → 复平面", 2.06, 21, WHITE, CN_FONT)
-    add_line("z(t) = x(t) + i y(t)", 1.64, 19)
+    add_math(r"z(t)=x(t)+i\,y(t)", 1.64, .35)
     panel.add(Line([-6.36, 1.29, 0], [-3.45, 1.29, 0],
                    stroke_color=MUTED, stroke_width=.65, stroke_opacity=.35))
     add_line("02 / FOURIER SERIES", 1.0, 15, CYAN)
-    add_line("z(t) = Σ c[n] exp(i 2πnt)", .57, 21)
-    add_line("c[n] = ∫₀¹ z(s)", .1, 23)
-    add_line("     exp(−i 2πns) ds", -.26, 21)
-    add_line("0 <= t <= 1", -.7, 17, MUTED)
+    add_math(r"z_N(t)=\sum_{n\in K}c_n e^{2\pi i n t}", .54, .55)
+    add_math(r"c_n=\int_0^1 z(s)e^{-2\pi i n s}\,ds", -.12, .50)
+    add_math(r"t\in[0,1]", -.70, .27, MUTED)
     panel.add(Line([-6.36, -.99, 0], [-3.45, -.99, 0],
                    stroke_color=MUTED, stroke_width=.65, stroke_opacity=.35))
     add_line("03 / EPICYCLES", -1.27, 15, MAGENTA)
-    add_line("圆半径 = |c[n]|", -1.69, 21, WHITE, CN_FONT)
-    add_line("角速度 = 2πn", -2.08, 21, WHITE, CN_FONT)
-    add_line(f"{n_terms:03d} TERMS / FFT", -2.66, 15, MUTED)
+    add_mixed("圆半径", r"=|c_n|", -1.69)
+    add_mixed("角速度", r"=2\pi n", -2.08)
+    add_math(rf"n\in K,\quad |K|={n_terms}", -2.65, .25, MUTED)
     return panel
 
 
@@ -111,6 +129,8 @@ def make_spectrum(amplitudes) -> VGroup:
             spectrum.add(Line([x, 0, 0], [x, height, 0],
                               stroke_color=CYAN if j % 2 == 0 else MAGENTA,
                               stroke_width=2, stroke_opacity=.75))
-    spectrum.add(_text("|c[n]| / MEASURED SPECTRUM", 10, MUTED)
+    magnitude = MathTex(r"|c_n|", font_size=15, color=MUTED)
+    caption = _text("/ MEASURED SPECTRUM", 10, MUTED)
+    spectrum.add(VGroup(magnitude, caption).arrange(RIGHT, buff=.08)
                  .move_to([0, -.16, 0]))
     return spectrum
