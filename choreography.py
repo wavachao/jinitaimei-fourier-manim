@@ -73,42 +73,43 @@ def make_stage():
 def dance_phase(t):
     """Return repeatable movement cues for a 20-second, 120-BPM routine.
 
-    Keys: ``beat`` (continuous count), ``phase`` (0..3), ``pose`` (string),
+    Keys: ``beat`` (continuous count), ``phase`` (continuous radians),
+    ``section`` (0..3), ``pose`` (string),
     ``body_sway`` / ``bounce`` (scene units), ``lean`` / ``arm_swing``
     (radians), ``ball_position`` (absolute xyz ndarray), ``ball_rotation``
-    (radians). Ball positions assume the dancer's feet are near y=-1.85.
+    (radians). Ball positions assume the dancer's feet are near y=-2.5.
     All numbers are analytic: callers can sample any timestamp independently.
     """
     t = float(np.clip(t, 0, 20))
     beat = 2 * t
     rhythm = 2 * pi * beat
     if t < 4:
-        phase, pose = 0, "entrance"
+        section, pose = 0, "idle"
         sway = .12 * sin(rhythm / 2)
         lean = .07 * sin(rhythm / 2)
         ball_x = 1.05 + sway
         ball_y = -.9 + .12 * sin(rhythm / 2)
     elif t < 10:
-        phase, pose = 1, "dribble"
+        section, pose = 1, "dribble"
         sway = .2 * sin(rhythm / 2)
         lean = -.09 + .04 * cos(rhythm)
         ball_x = 1.12 + sway
-        ball_y = -1.64 + 1.05 * abs(cos(rhythm / 2))
+        ball_y = -2.15 + 1.55 * abs(cos(rhythm / 2))
     elif t < 16:
-        phase, pose = 2, "shoulder_dance"
+        section, pose = 2, "dance"
         sway = .31 * sin(rhythm / 2)
         lean = .16 * sin(rhythm / 2)
         ball_x = 1.02 + .22 * sin(rhythm / 2)
         ball_y = -.88 + .19 * sin(rhythm)
     else:
-        phase, pose = 3, "finale"
+        section, pose = 3, "finale"
         # Ease into a clean held finishing pose during the last two seconds.
         fade = max(0., min(1., (18.5 - t) / 2.5))
         sway = .24 * sin(rhythm / 2) * fade
         lean = .11 * sin(rhythm / 2) * fade
         ball_x = 1.15 + .12 * sin(rhythm / 2) * fade
         ball_y = -.75 + .13 * cos(rhythm) * fade
-    return dict(beat=beat, phase=phase, pose=pose, body_sway=sway,
+    return dict(beat=beat, phase=rhythm / 2, section=section, pose=pose, body_sway=sway,
                 bounce=.075 * (1 - cos(rhythm)), lean=lean,
                 arm_swing=.25 * sin(rhythm / 2),
                 ball_position=np.array([ball_x, ball_y, 0.]),
