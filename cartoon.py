@@ -9,8 +9,8 @@ def _point(x, y):
 
 
 def _stroke(points, color, width=12):
-    return VMobject().set_points_as_corners(points).set_stroke(
-        color, width=width, joint_type=LineJointType.ROUND
+    return VMobject(joint_type=LineJointType.ROUND).set_points_as_corners(points).set_stroke(
+        color, width=width
     )
 
 
@@ -27,7 +27,7 @@ def make_basketball(radius=0.32):
                          _point(radius * 0.05, -radius * 0.35),
                          _point(-radius * 0.58, -radius * 0.81),
                          stroke_color="#63392C", stroke_width=2)
-    seam_r = seam_l.copy().flip(UP)
+    seam_r = seam_l.copy().flip(UP, about_point=ORIGIN)
     highlight = Arc(radius=radius * 0.82, start_angle=0.65, angle=0.72,
                     stroke_color="#FFD599", stroke_width=3)
     return VGroup(ball, shade, horizontal, vertical, seam_l, seam_r, highlight)
@@ -148,7 +148,7 @@ def make_dancer(pose="idle", phase=0.0):
                                _point(-0.58, 1.82), _point(-0.50, 1.46),
                                _point(-0.28, 1.69), _point(-0.02, 1.92),
                                _point(-0.02, 2.08)])
-    hair_r = hair_l.copy().flip(UP).set_fill("#AAB5C3")
+    hair_r = hair_l.copy().flip(UP, about_point=ORIGIN).set_fill("#AAB5C3")
     hair_lines = VGroup()
     for side in [-1, 1]:
         for offset in [0.0, 0.10, 0.20]:
