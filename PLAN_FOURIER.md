@@ -27,3 +27,5 @@
 
 ## LaTeX 排版更新计划
 用户确认电脑已安装完整 TeX Live。检查本机 latex/dvisvgm 路径，将数学公式改为 MathTex 真正的求和、积分与上下标排版；保留中文 Text，重新渲染并核验视频与关键帧。
+
+已确认本机 TeX Live 2024 与 dvisvgm 3.2.2 可用（D:/texlive/2024/bin/windows）。公式升级在 feat/latex-formulas 独立 worktree 完成并合并；MathTex 与动态数字已实际编译，完整场景静态预览通过。

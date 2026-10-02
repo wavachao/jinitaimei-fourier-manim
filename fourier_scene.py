@@ -78,28 +78,28 @@ class FourierDance(Scene):
         trace = always_redraw(curve_frame)
         tip = always_redraw(lambda: VGroup(Dot(point(data()[1][-1]), radius=.10,color='#FFFFFF',fill_opacity=.12),Dot(point(data()[1][-1]),radius=.035,color='#FFFFFF')))
         self.add(wheels,trace,tip)
-        coords = DecimalNumber(0,num_decimal_places=3,font_size=20,mob_class=Text,color='#FF70D9').move_to([-4.9,-2.4,0]).set_z_index(12)
+        coords = DecimalNumber(0,num_decimal_places=3,font_size=20,mob_class=MathTex,color='#FF70D9').move_to([-4.9,-2.4,0]).set_z_index(12)
         coords.add_updater(lambda m: m.set_value(progress.get_value()%1).set_color('#FF70D9').set_z_index(12))
         self.add(coords)
-        self.add(Text('t =',font='Consolas',font_size=14,color='#7BDAD9').move_to([-5.48,-2.4,0]).set_z_index(12))
+        self.add(MathTex('t =',font_size=20,color='#7BDAD9').move_to([-5.48,-2.4,0]).set_z_index(12))
         caption = Text('从一个舞姿，到一条闭合曲线',font='Microsoft YaHei',font_size=23,color='#99AEB9').move_to([1.4,-3.58,0]).set_z_index(12)
         self.add(caption)
         self.wait(2)
-        new_status=Text('02 / FOURIER SYNTHESIS',font='Consolas',font_size=17,color='#7BDAD9').move_to(status)
+        new_status=Text('02 / FOURIER SYNTHESIS',font='Consolas',font_size=17,color='#7BDAD9').move_to(status).set_z_index(12)
         self.play(FadeTransform(status,new_status),run_time=.5)
         status=new_status
         self.play(progress.animate.set_value(1),run_time=13.5,rate_func=linear)
         # The same coefficients drive both the moving endpoint and the contour.
         mode['dance']=True
         snapshot.cache_clear()
-        next_caption=Text('周期形变 · 旋转向量 · 经典律动',font='Microsoft YaHei',font_size=23,color='#99AEB9').move_to(caption)
-        next_status=Text('03 / PERIODIC MOTION',font='Consolas',font_size=17,color='#7BDAD9').move_to(status)
+        next_caption=Text('周期形变 · 旋转向量 · 经典律动',font='Microsoft YaHei',font_size=23,color='#99AEB9').move_to(caption).set_z_index(12)
+        next_status=Text('03 / PERIODIC MOTION',font='Consolas',font_size=17,color='#7BDAD9').move_to(status).set_z_index(12)
         self.play(FadeTransform(caption,next_caption),FadeTransform(status,next_status),motion.animate.set_value(.5),progress.animate.set_value(1.0625),run_time=.5,rate_func=linear)
         caption=next_caption
         status=next_status
         self.play(motion.animate.set_value(8),progress.animate.set_value(2),run_time=7.5,rate_func=linear)
         for obj in (wheels,trace,tip,coords):
             obj.clear_updaters()
-        final_caption=Text('鸡你太美  /  THE BEAUTY OF MATHEMATICS',font='Microsoft YaHei',font_size=21,color='#D5E7EC').move_to(caption)
+        final_caption=Text('鸡你太美  /  THE BEAUTY OF MATHEMATICS',font='Microsoft YaHei',font_size=21,color='#D5E7EC').move_to(caption).set_z_index(12)
         self.play(FadeTransform(caption,final_caption),wheels.animate.set_stroke(opacity=.10),FadeOut(tip),run_time=.7)
         self.wait(1.3)
