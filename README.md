@@ -1,4 +1,10 @@
-# 鸡你太美 · Manim 篮球舞梗
+# 鸡你太美 · 傅里叶数学动画
+
+用实际傅里叶系数、旋转圆轮和周期形变绘制经典舞姿。26 秒，1080p，30 fps，原创节奏配乐。
+
+![画面预览](exports/fourier_poster.png)
+
+[下载成片 MP4](exports/FourierDance.mp4)
 
 ## 数学轮廓版（最新）
 
